@@ -2097,6 +2097,11 @@ public class Workspace<T extends View & PageIndicator> extends PagedView<T>
         boolean lockHomeScreen = prefs.getDesktopLock().getValue();
         if (lockHomeScreen) {
             child.setVisibility(View.VISIBLE);
+            // NEO: no drag will happen, so don't keep a stale drag reference around
+            // (it is normally cleared in onDropCompleted, which won't be called).
+            if (mDragInfo != null && mDragInfo.cell == child) {
+                mDragInfo = null;
+            }
 
             if (dragOptions.preDragCondition != null) {
                 if (Flags.msdlFeedback()) {

@@ -30,6 +30,7 @@ import com.android.launcher3.popup.ArrowPopup.closeOpenContainer
 import com.android.launcher3.shortcuts.DeepShortcutView
 import com.android.launcher3.shortcuts.ShortcutDragPreviewProvider
 import com.android.launcher3.touch.ItemLongClickListener
+import com.neoapps.neolauncher.preferences.NeoPrefs
 
 /** Handler to control drag-and-drop for popup items */
 interface PopupItemDragHandler : OnLongClickListener, OnTouchListener
@@ -56,6 +57,9 @@ internal constructor(
         if (!ItemLongClickListener.canStartDrag(mLauncher)) return false
         // Return early if not the correct view
         if (v.parent !is DeepShortcutView) return false
+        // NEO: when the desktop is locked, Workspace.beginDragShared() refuses the drag and
+        // returns null. Bail out before hiding the icon so the popup stays intact.
+        if (NeoPrefs.getInstance().desktopLock.getValue()) return false
 
         // Long clicked on a shortcut.
         val sv = v.parent as DeepShortcutView
@@ -78,6 +82,11 @@ internal constructor(
                 ShortcutDragPreviewProvider(sv.iconView, iconShift),
                 DragOptions(),
             )
+        if (dv == null) {
+            // Drag was refused (e.g. desktop locked): restore the icon and do not crash.
+            sv.setWillDrawIcon(true)
+            return false
+        }
         dv.animateShift(-iconShift.x, -iconShift.y)
 
         // TODO: support dragging from within folder without having to close it
