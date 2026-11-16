@@ -510,6 +510,12 @@ public class Folder extends AbstractFloatingView implements ClipPathView, DragSo
 
             addDragListener(options);
             callBeginDragShared(v, options);
+            // NEO: the drag may be refused (desktop locked). Clean up so the folder doesn't
+            // keep listening to drags it doesn't own.
+            if (!mActivityContext.getDragController().isDragging()) {
+                mActivityContext.getDragController().removeDragListener(this);
+                mCurrentDragView = null;
+            }
         }
         return true;
     }

@@ -161,7 +161,7 @@ public class ItemLongClickListener {
 
         // Start the drag
         final DragController dragController = launcher.getDragController();
-        dragController.addDragListener(new DragController.DragListener() {
+        final DragController.DragListener dragListener = new DragController.DragListener() {
             @Override
             public void onDragStart(DropTarget.DragObject dragObject, DragOptions options) {
                 v.setVisibility(INVISIBLE);
@@ -172,9 +172,15 @@ public class ItemLongClickListener {
                 v.setVisibility(VISIBLE);
                 dragController.removeDragListener(this);
             }
-        });
+        };
+        dragController.addDragListener(dragListener);
 
         launcher.getWorkspace().beginDragShared(v, launcher.getAppsView(), new DragOptions());
+        // NEO: the drag may be refused (desktop locked). Don't leak the listener, otherwise it
+        // would hide this icon during the next, unrelated drag.
+        if (!dragController.isDragging()) {
+            dragController.removeDragListener(dragListener);
+        }
         return false;
     }
 

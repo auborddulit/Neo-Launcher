@@ -35,7 +35,6 @@ import com.android.launcher3.R
 import com.android.launcher3.Utilities
 import com.android.launcher3.anim.AnimatorListeners
 import com.android.launcher3.util.ComponentKey
-import com.android.launcher3.widget.picker.WidgetsFullSheet
 import com.neoapps.neolauncher.dash.DashSheet
 import com.neoapps.neolauncher.gestures.GestureController
 import com.neoapps.neolauncher.gestures.GestureHandler
@@ -301,7 +300,10 @@ class OpenWidgetsGestureHandler(context: Context, config: JSONObject?) :
     override val requiresForeground = false
 
     override fun onGestureTrigger(controller: GestureController, view: View?) {
-        WidgetsFullSheet.show(controller.launcher, true)
+        // NEO: go through the launcher's own entry point instead of WidgetsFullSheet.show():
+        // it handles safe mode and reuses an already open sheet instead of stacking a second
+        // one on top (which then swallows touches and looks like the picker "doesn't work").
+        controller.launcher.openWidgetPicker()
     }
 }
 
