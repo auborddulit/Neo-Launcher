@@ -116,6 +116,22 @@
             </intent-filter>
         </activity>
 
+        <!-- "Open app drawer" home screen shortcut, listed in the widget picker.
+             Returns a pinned shortcut without showing any UI. -->
+        <activity
+            android:name="com.neoapps.neolauncher.shortcuts.OpenAppDrawerShortcutActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:icon="@drawable/ic_shortcut_open_app_drawer"
+            android:label="@string/action_open_drawer"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name="com.neoapps.neolauncher.smartspace.SmartSpacePreferencesShortcut"
             android:theme="@style/Theme.Transparent" />
