@@ -108,7 +108,6 @@ fun MainPrefsPage() {
         PageItem.PrefsGesturesDash
     )
     val otherPrefs: List<PageItem> = listOfNotNull(
-        PageItem.PrefsBackup,
         if (showDev) PageItem.PrefsDeveloper else null,
         PageItem.PrefsAbout
     )
@@ -269,9 +268,6 @@ fun MainPrefsPage() {
                         is NavRoute.Gestures.Gesture -> GestureSelectorPage(gesturesMap[route.key]!!)
                         is NavRoute.Gestures -> GesturesPrefsPage()
 
-                        is NavRoute.Backup.Create -> BackupCreatePage()
-                        is NavRoute.Backup.Restore -> BackupRestorePage()
-                        is NavRoute.Backup -> BackupMainPage()
 
                         is NavRoute.Dev -> DevPrefsPage()
 

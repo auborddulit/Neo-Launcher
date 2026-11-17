@@ -68,11 +68,6 @@ open class PageItem(
             icon = Phosphor.ScribbleLoop,
             route = NavRoute.Gestures()
         )
-        val PrefsBackup = PageItem(
-            titleId = R.string.backups,
-            icon = Phosphor.ClockCounterClockwise,
-            route = NavRoute.Backup()
-        )
         val PrefsDeveloper = PageItem(
             titleId = R.string.developer_options_title,
             icon = Phosphor.BracketsCurly,

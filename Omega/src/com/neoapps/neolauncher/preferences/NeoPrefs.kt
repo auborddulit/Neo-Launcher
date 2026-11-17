@@ -1372,27 +1372,6 @@ class NeoPrefs private constructor(val context: Context) {
             override fun unflattenValue(value: String) = value
         }
 
-    var restoreSuccess = BooleanPref(
-        key = PrefKey.PREFS_RESTORE_SUCCESS,
-        titleId = R.string.restore_success,
-        dataStore = dataStore,
-        defaultValue = false
-    )
-
-    var backupCreate = NavigationPref(
-        dataStore = dataStore,
-        key = PrefKey.BACKUP_CREATE,
-        titleId = R.string.backup_create,
-        navRoute = NavRoute.Backup.Create()
-    )
-
-    var backupRestore = NavigationPref(
-        dataStore = dataStore,
-        key = PrefKey.BACKUP_RESTORE,
-        titleId = R.string.backup_restore,
-        navRoute = NavRoute.Backup.Restore()
-    )
-
     //Dev options
     var restartLauncher = StringPref(
         titleId = R.string.title__restart_launcher,
