@@ -43,11 +43,6 @@ open class PageItem(
             icon = Phosphor.Folder,
             route = NavRoute.Folder()
         )
-        val PrefsDock = PageItem(
-            titleId = R.string.title__general_dock,
-            icon = PhosphorCustom.DeviceMobileDock,
-            route = NavRoute.Dock()
-        )
         val PrefsDrawer = PageItem(
             titleId = R.string.title__general_drawer,
             icon = Phosphor.DotsNine,

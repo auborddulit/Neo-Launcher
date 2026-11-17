@@ -554,11 +554,12 @@ class NeoPrefs private constructor(val context: Context) {
     )
 
     // Dock
+    // NEO (lite build): the dock is hidden and its settings page removed.
     var dockEnabled = BooleanPref(
         dataStore = dataStore,
         key = PrefKey.DOCK_ENABLED,
         titleId = R.string.title__dock_hide,
-        defaultValue = true,
+        defaultValue = false,
         onChange = { reloadGrid() }
     )
     var dockExpandable = BooleanPref(
