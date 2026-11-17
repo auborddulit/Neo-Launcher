@@ -36,10 +36,18 @@ jobs:
       - name: Report build errors
         if: failure()
         run: |
-          grep -E '^e: |error:|\* What went wrong|FAILURE|Execution failed|AAPT|resource .* not found' build.log \
-            | sed 's#/home/runner/work/[^/]*/[^/]*/##' | head -c 60000 > errors.txt || true
-          msg=$(sed -e 's/%/%25/g' errors.txt | awk 'BEGIN{ORS="%0A"} {print}')
-          echo "::error title=Build errors::${msg}"
+          grep -E '^e: |error:|\* What went wrong|Execution failed|AAPT|resource .* not found' build.log \
+            | sed 's#file:///home/runner/work/[^/]*/[^/]*/##; s#/home/runner/work/[^/]*/[^/]*/##' \
+            | awk '!seen[$0]++' > errors.txt || true
+          # GitHub truncates long annotations: send the errors in chunks (max 10 per step).
+          split -C 3500 -d -a 2 errors.txt chunk_ || true
+          n=0
+          for f in chunk_*; do
+            [ -f "$f" ] || continue
+            n=$((n+1)); [ $n -gt 10 ] && break
+            msg=$(sed -e 's/%/%25/g' "$f" | awk 'BEGIN{ORS="%0A"} {print}')
+            echo "::error title=Build errors ($n)::${msg}"
+          done
 
       - name: Save name of our Artifact
         id: set-result-artifact

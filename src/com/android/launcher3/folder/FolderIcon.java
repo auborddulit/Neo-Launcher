@@ -881,9 +881,6 @@ public class FolderIcon extends FrameLayout implements FloatingIconViewCompanion
     }
 
     private void applyTouchActions(FolderInfo info) {
-        setOnClickListener(info.isCoverMode() ?
-                ItemClickHandler.FOLDER_COVER_INSTANCE : ItemClickHandler.INSTANCE);
-    }
         setOnClickListener(mInfo.isCoverMode() ?
                 ItemClickHandler.FOLDER_COVER_INSTANCE : ItemClickHandler.INSTANCE);
     }
