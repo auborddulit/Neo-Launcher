@@ -132,20 +132,7 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="com.neoapps.neolauncher.smartspace.SmartSpacePreferencesShortcut"
-            android:theme="@style/Theme.Transparent" />
 
-        <receiver
-            android:name="com.neoapps.neolauncher.smartspace.SmartSpaceAppWidgetProvider"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/smartspace_appwidget_info" />
-        </receiver>
 
     </application>
 </manifest>

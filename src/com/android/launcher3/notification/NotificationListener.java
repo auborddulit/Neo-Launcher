@@ -40,7 +40,6 @@ import androidx.annotation.WorkerThread;
 
 import com.android.launcher3.util.PackageUserKey;
 import com.android.launcher3.util.SettingsCache;
-import com.neoapps.neolauncher.smartspace.provider.NotificationsManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -83,8 +82,6 @@ public class NotificationListener extends NotificationListenerService {
     private SettingsCache mSettingsCache;
     private SettingsCache.OnChangeListener mNotificationSettingsChangedListener;
 
-    // Edited (for smartspace)
-    private NotificationsManager mNotificationManager;
 
     public NotificationListener() {
         mWorkerHandler = new Handler(MODEL_EXECUTOR.getLooper(), this::handleWorkerMessage);
@@ -122,7 +119,6 @@ public class NotificationListener extends NotificationListenerService {
     @Override
     public void onCreate() {
         super.onCreate();
-        mNotificationManager = NotificationsManager.INSTANCE.get(this);
     }
 
     private boolean handleWorkerMessage(Message message) {
@@ -248,7 +244,6 @@ public class NotificationListener extends NotificationListenerService {
     // Edited
     private void onNotificationFullRefresh() {
         mWorkerHandler.obtainMessage(MSG_NOTIFICATION_FULL_REFRESH).sendToTarget();
-        mNotificationManager.onNotificationFullRefresh();
     }
 
     @Override
@@ -265,7 +260,6 @@ public class NotificationListener extends NotificationListenerService {
     public void onNotificationPosted(final StatusBarNotification sbn) {
         if (sbn != null) {
             mWorkerHandler.obtainMessage(MSG_NOTIFICATION_POSTED, sbn).sendToTarget();
-            mNotificationManager.onNotificationPosted(sbn);
         }
     }
 
@@ -274,7 +268,6 @@ public class NotificationListener extends NotificationListenerService {
     public void onNotificationRemoved(final StatusBarNotification sbn) {
         if (sbn != null) {
             mWorkerHandler.obtainMessage(MSG_NOTIFICATION_REMOVED, sbn).sendToTarget();
-            mNotificationManager.onNotificationRemoved(sbn);
         }
     }
 

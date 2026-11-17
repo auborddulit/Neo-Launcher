@@ -1,12 +1,6 @@
 package com.neoapps.neolauncher.preferences
 
 import com.android.launcher3.R
-import com.neoapps.neolauncher.smartspace.Temperature
-import com.neoapps.neolauncher.smartspace.provider.AlarmEventProvider
-import com.neoapps.neolauncher.smartspace.provider.BatteryStatusProvider
-import com.neoapps.neolauncher.smartspace.provider.CalendarEventProvider
-import com.neoapps.neolauncher.smartspace.provider.NotificationUnreadProvider
-import com.neoapps.neolauncher.smartspace.provider.NowPlayingProvider
 
 const val PREFS_LANGUAGE_DEFAULT_NAME = "System"
 const val PREFS_LANGUAGE_DEFAULT_CODE = "en"
@@ -59,28 +53,8 @@ val drawerLayoutOptions = mutableMapOf(
     LAYOUT_TABS to R.string.title_drawer_tabs
 )
 
-val temperatureUnitOptions = listOfNotNull(
-    Temperature.Unit.Celsius,
-    Temperature.Unit.Fahrenheit,
-    Temperature.Unit.Kelvin,
-    Temperature.Unit.Rakine,
-    Temperature.Unit.Delisle,
-    Temperature.Unit.Newton,
-    Temperature.Unit.Reaumur,
-    Temperature.Unit.Romer
-).associateBy(
-    keySelector = { it.toString() },
-    valueTransform = { "${it.name} (${it.suffix})" }
-)
-
 
 val iconIds = mapOf(
-    //Events
-    BatteryStatusProvider::class.java.name to R.drawable.ic_battery_low,
-    NowPlayingProvider::class.java.name to R.drawable.ic_music_play,
-    CalendarEventProvider::class.java.name to R.drawable.ic_calendar,
-    AlarmEventProvider::class.java.name to R.drawable.ic_alarm_on_black_24dp,
-    NotificationUnreadProvider::class.java.name to R.drawable.ic_smartspace_preferences,
     // Desktop Popup
     PREFS_DESKTOP_POPUP_EDIT to R.drawable.ic_edit_no_shadow,
     PREFS_DESKTOP_POPUP_UNINSTALL to R.drawable.ic_uninstall_no_shadow,

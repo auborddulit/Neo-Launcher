@@ -43,14 +43,6 @@ import com.neoapps.neolauncher.allapps.HiddenAppFilter
 import com.neoapps.neolauncher.flowerpot.Flowerpot
 import com.neoapps.neolauncher.preferences.NeoPrefs
 import com.neoapps.neolauncher.preferences.PrefKey
-import com.neoapps.neolauncher.smartspace.provider.AlarmEventProvider
-import com.neoapps.neolauncher.smartspace.provider.BatteryStatusProvider
-import com.neoapps.neolauncher.smartspace.provider.CalendarEventProvider
-import com.neoapps.neolauncher.smartspace.provider.NotificationUnreadProvider
-import com.neoapps.neolauncher.smartspace.provider.NowPlayingProvider
-import com.neoapps.neolauncher.smartspace.weather.GoogleWeatherProvider
-import com.neoapps.neolauncher.smartspace.weather.OWMWeatherProvider
-import com.neoapps.neolauncher.smartspace.weather.PixelWeatherProvider
 import com.neoapps.neolauncher.theme.ThemeOverride
 import java.util.Locale
 
@@ -151,33 +143,6 @@ class Config(val context: Context) {
             Intent("com.gau.go.launcherex.theme"),
             Intent("com.dlto.atom.launcher.THEME"),
             Intent("net.oneplus.launcher.icons.ACTION_PICK_ICON"),
-        )
-
-        val smartspaceEventProviders = mapOf(
-            BatteryStatusProvider::class.java.name to R.string.battery_status,
-            NowPlayingProvider::class.java.name to R.string.event_provider_now_playing,
-            CalendarEventProvider::class.java.name to R.string.smartspace_provider_calendar,
-            AlarmEventProvider::class.java.name to R.string.name_provider_alarm_events,
-            NotificationUnreadProvider::class.java.name to R.string.event_provider_unread_notifications,
-        )
-
-        fun smartspaceWeatherProviders(context: Context) = mapOf<String, String>(
-            GoogleWeatherProvider::class.java.name to context.resources.getString(R.string.google),
-            OWMWeatherProvider::class.java.name to context.resources.getString(R.string.weather_provider_owm),
-            if (PixelWeatherProvider.isAvailable(context))
-                PixelWeatherProvider::class.java.name to context.resources.getString(R.string.weather_provider_pe)
-            else {
-                "none" to context.resources.getString(R.string.none)
-            }
-        )
-
-        fun calendarOptions(context: Context) = mapOf(
-            context.resources.getString(R.string.smartspace_calendar_gregorian) to context.resources.getString(
-                R.string.title_calendar_gregorian
-            ),
-            context.resources.getString(R.string.smartspace_calendar_persian) to context.resources.getString(
-                R.string.title_calendar_persian
-            )
         )
 
         val popupOptions = mapOf(
@@ -298,15 +263,5 @@ class Config(val context: Context) {
             return result
         }
 
-        fun getOWMApiKey(): String {
-            return if (BuildConfig.APPLICATION_ID.contains("debug") || BuildConfig.APPLICATION_ID.contains(
-                    "alpha"
-                )
-            ) {
-                BuildConfig.OWM_API_KEY
-            } else {
-                NeoPrefs.getInstance().smartspaceWeatherApiKey.getValue().trim()
-            }
-        }
     }
 }

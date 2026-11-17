@@ -176,8 +176,9 @@ public final class Utilities {
     public static final boolean IS_DEBUG_DEVICE = BuildConfig.IS_DEBUG_DEVICE;
 
     public static boolean qsbOnFirstScreen() {
-        NeoPrefs prefs = NeoPrefs.getInstance();
-        return !injectableModelItems() && WIDGET_ON_FIRST_SCREEN && prefs.getSmartspaceEnable().getValue();
+        // NEO: the "At a glance" (smartspace) feature was removed, nothing is pinned
+        // on the first screen anymore.
+        return false;
     }
     public static final int TRANSLATE_UP = 0;
     public static final int TRANSLATE_DOWN = 1;

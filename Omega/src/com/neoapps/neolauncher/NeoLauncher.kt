@@ -77,7 +77,6 @@ import com.android.systemui.plugins.shared.LauncherOverlayManager
 import com.neoapps.neolauncher.preferences.NeoPrefs
 import com.neoapps.neolauncher.preferences.PreferencesChangeCallback
 import com.neoapps.neolauncher.shortcuts.OmegaShortcuts
-import com.neoapps.neolauncher.smartspace.provider.SmartspaceProvider
 import com.neoapps.neolauncher.theme.ThemeManager
 import com.neoapps.neolauncher.theme.ThemeOverride
 import com.neoapps.neolauncher.util.Config
@@ -482,7 +481,6 @@ class NeoLauncher : Launcher(), SavedStateRegistryOwner,
         super.onResume()
         // lifecycle handled by the Activity/Launcher base class
         restartIfPending()
-        SmartspaceProvider.INSTANCE.get(this).checkSetup()
 
         dragLayer.viewTreeObserver.addOnDrawListener(object : ViewTreeObserver.OnDrawListener {
             private var handled = false

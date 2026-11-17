@@ -51,10 +51,6 @@ import com.neoapps.neolauncher.iconpack.IconPackProvider
 import com.neoapps.neolauncher.icons.CustomAdaptiveIconDrawable
 import com.neoapps.neolauncher.icons.IconShape
 import com.neoapps.neolauncher.search.SearchProviderController
-import com.neoapps.neolauncher.smartspace.Temperature
-import com.neoapps.neolauncher.smartspace.provider.BatteryStatusProvider
-import com.neoapps.neolauncher.smartspace.provider.NowPlayingProvider
-import com.neoapps.neolauncher.smartspace.weather.GoogleWeatherProvider
 import com.neoapps.neolauncher.theme.AccentColorOption
 import com.neoapps.neolauncher.util.Config
 import com.neoapps.neolauncher.util.CustomPreferencesMigration
@@ -938,7 +934,7 @@ class NeoPrefs private constructor(val context: Context) {
         navRoute = NavRoute.Drawer.Folders()
     )
 
-    // Notifications & Widgets/Smartspace
+    // Notifications
     val notificationDots = IntentLauncherPref(
         dataStore = dataStore,
         key = PrefKey.NOTIFICATION_DOTS,
@@ -1020,107 +1016,6 @@ class NeoPrefs private constructor(val context: Context) {
         titleId = R.string.title__notification_background,
         defaultValue = "custom|#FFF32020",
         navRoute = NavRoute.Widgets.NotificationDots(),
-    )
-
-    val smartspaceEnable = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.WIDGETS_SMARTSPACE_ENABLED,
-        titleId = R.string.title_smartspace,
-        defaultValue = false,
-        onChange = { restart() }
-    )
-
-    val smartspaceBackground = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.WIDGETS_SMARTSPACE_BACKGROUND,
-        titleId = R.string.title_smartspace_background,
-        defaultValue = false,
-    )
-
-    val smartspaceDate = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.WIDGETS_SMARTSPACE_DATE,
-        titleId = R.string.title_smartspace_date,
-        defaultValue = true,
-        onChange = { pokeChange() }
-    )
-
-    val smartspaceCalendar = StringSelectionPref(
-        dataStore = dataStore,
-        key = PrefKey.WIDGETS_SMARTSPACE_CALENDAR,
-        titleId = R.string.title_smartspace_calendar,
-        defaultValue = context.getString(R.string.smartspace_calendar_gregorian),
-        entries = Config.calendarOptions(context)
-    )
-
-    val smartspaceTime = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.WIDGETS_SMARTSPACE_TIME,
-        titleId = R.string.title_smartspace_time,
-        defaultValue = true,
-        onChange = { pokeChange() }
-    )
-
-    val smartspaceTime24H = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.WIDGETS_SMARTSPACE_TIME_24H,
-        titleId = R.string.title_smartspace_time_24_h,
-        defaultValue = false,
-        onChange = { restart() }
-    )
-
-    var smartspaceWeatherApiKey = StringTextPref(
-        dataStore = dataStore,
-        key = PrefKey.WIDGETS_SMARTSPACE_WEATHER_API_KEY,
-        titleId = R.string.weather_api_key,
-        defaultValue = "",
-    )
-
-    var smartspaceWeatherCity = StringTextPref(
-        dataStore = dataStore,
-        key = PrefKey.WIDGETS_SMARTSPACE_WEATHER_CITY,
-        titleId = R.string.weather_city,
-        defaultValue = "##Auto",
-        autoValue = "##Auto",
-        onChange = {
-            pokeChange()
-        }
-    )
-
-    val smartspaceWeatherUnit = StringSelectionPref(
-        dataStore = dataStore,
-        key = PrefKey.WIDGETS_SMARTSPACE_WEATHER_UNIT,
-        titleId = R.string.title_smartspace_weather_units,
-        defaultValue = Temperature.Unit.Celsius.toString(),
-        entries = temperatureUnitOptions,
-        onChange = { recreate() }
-    )
-
-    var smartspaceWeatherProvider = TwoStatePref(
-        dataStore = dataStore,
-        key1 = PrefKey.WIDGETS_SMARTSPACE_WEATHER_ENABLED,
-        key2 = PrefKey.WIDGETS_SMARTSPACE_WEATHER_PROVIDER,
-        titleId = R.string.title_smartspace_widget_enable,
-        summaryId = R.string.title_smartspace_widget_provider,
-        defaultValue1 = false,
-        defaultValue2 = "none",
-        entries = Config.smartspaceWeatherProviders(context).filter { it.key != "none" },
-        onChange = {
-            recreate()
-        }
-    )
-
-    var smartspaceEventProviders = StringMultiSelectionPref(
-        dataStore = dataStore,
-        key = PrefKey.WIDGETS_SMARTSPACE_EVENTS_PROVIDER,
-        titleId = R.string.title_smartspace_event_providers,
-        defaultValue = setOf(
-            GoogleWeatherProvider::class.java.name,
-            BatteryStatusProvider::class.java.name,
-            NowPlayingProvider::class.java.name
-        ),
-        entries = Config.smartspaceEventProviders,
-        onChange = { pokeChange() }
     )
 
     val notificationCountFolder = BooleanPref(
