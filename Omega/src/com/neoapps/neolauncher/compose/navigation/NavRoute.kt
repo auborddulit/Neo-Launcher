@@ -65,12 +65,6 @@ open class NavRoute : Parcelable {
     }
 
     @Serializable
-    open class Search : NavRoute() {
-        @Serializable
-        class SearchProviders : Search()
-    }
-
-    @Serializable
     open class Dev : NavRoute() {
 
     }

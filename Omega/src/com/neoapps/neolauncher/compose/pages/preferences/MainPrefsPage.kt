@@ -103,7 +103,6 @@ fun MainPrefsPage() {
     )
     val featuresPrefs = persistentListOf(
         PageItem.PrefsWidgetsNotifications,
-        PageItem.PrefsSearchFeed,
     )
     val otherPrefs: List<PageItem> = listOfNotNull(
         if (showDev) PageItem.PrefsDeveloper else null,
@@ -247,8 +246,6 @@ fun MainPrefsPage() {
                         is NavRoute.Widgets.NotificationDots -> ColorSelectionPage(PrefKey.NOTIFICATION_DOTS_COLOR)
                         is NavRoute.Widgets -> WidgetsPrefsPage()
 
-                        is NavRoute.Search.SearchProviders -> SearchProvidersPage()
-                        is NavRoute.Search -> SearchPrefsPage()
 
 
 

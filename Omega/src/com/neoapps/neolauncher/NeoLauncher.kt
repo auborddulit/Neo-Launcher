@@ -470,13 +470,6 @@ class NeoLauncher : Launcher(), SavedStateRegistryOwner,
         }
     }
 
-    override fun getDefaultOverlay(): LauncherOverlayManager {
-        if (mOverlayManager == null) {
-            mOverlayManager = OverlayCallbackImpl(this)
-        }
-        return mOverlayManager
-    }
-
     override fun onResume() {
         super.onResume()
         // lifecycle handled by the Activity/Launcher base class

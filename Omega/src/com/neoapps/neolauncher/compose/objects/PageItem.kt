@@ -58,11 +58,6 @@ open class PageItem(
             icon = Phosphor.SquaresFour,
             route = NavRoute.Widgets()
         )
-        val PrefsSearchFeed = PageItem(
-            titleId = R.string.title__general_search_feed,
-            icon = Phosphor.MagnifyingGlass,
-            route = NavRoute.Search()
-        )
         val PrefsDeveloper = PageItem(
             titleId = R.string.developer_options_title,
             icon = Phosphor.BracketsCurly,

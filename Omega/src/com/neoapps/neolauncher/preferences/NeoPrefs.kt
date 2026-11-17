@@ -44,17 +44,16 @@ import com.android.launcher3.util.SettingsCache
 import com.neoapps.neolauncher.DeviceProfileOverrides
 import com.neoapps.neolauncher.compose.navigation.NavRoute
 import com.neoapps.neolauncher.compose.views.IconShapeIcon
+import com.neoapps.neolauncher.data.SearchProviderRepository
 import com.neoapps.neolauncher.groups.AppGroupsManager
 import com.neoapps.neolauncher.groups.category.DrawerTabs
 import com.neoapps.neolauncher.iconpack.IconPackInfo
 import com.neoapps.neolauncher.iconpack.IconPackProvider
 import com.neoapps.neolauncher.icons.CustomAdaptiveIconDrawable
 import com.neoapps.neolauncher.icons.IconShape
-import com.neoapps.neolauncher.search.SearchProviderController
 import com.neoapps.neolauncher.theme.AccentColorOption
 import com.neoapps.neolauncher.util.Config
 import com.neoapps.neolauncher.util.CustomPreferencesMigration
-import com.neoapps.neolauncher.util.getFeedProviders
 import com.neoapps.neolauncher.util.languageOptions
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
@@ -1025,36 +1024,25 @@ class NeoPrefs private constructor(val context: Context) {
         defaultValue = true,
     )
 
-    // Search & Feed
+    // Drawer search
+    // Kept only for the search provider database (SearchProviderRepository); not shown in the UI.
+    var searchProviders = LongMultiSelectionPref(
+        dataStore = dataStore,
+        titleId = R.string.title_search_providers,
+        key = PrefKey.SEARCH_PROVIDERS,
+        defaultValue = setOf(1L),
+        entries = {
+            getKoin().get<SearchProviderRepository>().allProviders.value
+                .associate { Pair(it.id, it.name) }
+        },
+    )
+
     val searchDrawerEnabled = BooleanPref(
         dataStore = dataStore,
         key = PrefKey.SEARCH_DRAWER_ENABLED,
         titleId = R.string.title_all_apps_search,
         defaultValue = true,
         onChange = { recreate() }
-    )
-
-    val searchDockEnabled = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.SEARCH_DOCK_ENABLED,
-        titleId = R.string.title_all_apps_search,
-        defaultValue = false,
-    )
-
-    var searchProvidersEdit = NavigationPref(
-        dataStore = dataStore,
-        key = PrefKey.SEARCH_PROVIDERS_EDIT,
-        titleId = R.string.title_search_providers,
-        summaryId = R.string.edit_search_summary,
-        navRoute = NavRoute.Search.SearchProviders(),
-    )
-
-    var searchProviders = LongMultiSelectionPref(
-        dataStore = dataStore,
-        titleId = R.string.title_search_providers,
-        key = PrefKey.SEARCH_PROVIDERS,
-        defaultValue = setOf(1L),
-        entries = { SearchProviderController.getSearchProvidersMap() },
     )
 
     /*var searchProvider = StringSelectionPref(
@@ -1064,21 +1052,6 @@ class NeoPrefs private constructor(val context: Context) {
         defaultValue = "",
         entries = getSearchProvidersMap(context),
     )*/
-
-    val searchShowMic = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.SEARCH_SHOW_MIC,
-        titleId = R.string.title__search_show_assistant,
-        defaultValue = false
-    )
-
-    val searchShowAssistant = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.SEARCH_SHOW_ASSISTANT,
-        titleId = R.string.title__search_action_assistant,
-        summaryId = R.string.summary__search_show_as_assistant_summary,
-        defaultValue = false
-    )
 
     val searchHiddenApps = BooleanPref(
         dataStore = dataStore,
@@ -1095,40 +1068,6 @@ class NeoPrefs private constructor(val context: Context) {
         titleId = R.string.title_fuzzy_search,
         summaryId = R.string.summary_fuzzy_search,
         defaultValue = false,
-    )
-
-    var searchGlobal = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.SEARCH_GLOBAL_ENABLED,
-        titleId = R.string.title_all_apps_google_search,
-        summaryId = R.string.summary_all_apps_google_search,
-        defaultValue = true,
-    )
-
-    var searchContacts = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.SEARCH_CONTACTS_ENABLED,
-        titleId = R.string.title_search_contacts,
-        defaultValue = false,
-    )
-
-    var feedEnable = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.FEED_ENABLE,
-        titleId = R.string.title_enable_feed,
-        defaultValue = false,
-    )
-
-    var feedProvider = TwoStatePref(
-        dataStore = dataStore,
-        key1 = PrefKey.FEED_ENABLE,
-        key2 = PrefKey.FEED_PROVIDER,
-        titleId = R.string.title_feed_provider,
-        summaryId = R.string.title_smartspace_widget_provider,
-        defaultValue1 = false,
-        defaultValue2 = "",
-        entries = context.getFeedProviders(),
-        onChange = { reloadModel() }
     )
 
 
