@@ -43,11 +43,6 @@ open class PageItem(
             icon = Phosphor.Folder,
             route = NavRoute.Folder()
         )
-        val PrefsDock = PageItem(
-            titleId = R.string.title__general_dock,
-            icon = PhosphorCustom.DeviceMobileDock,
-            route = NavRoute.Dock()
-        )
         val PrefsDrawer = PageItem(
             titleId = R.string.title__general_drawer,
             icon = Phosphor.DotsNine,
@@ -57,21 +52,6 @@ open class PageItem(
             titleId = R.string.title__general_widgets_notifications,
             icon = Phosphor.SquaresFour,
             route = NavRoute.Widgets()
-        )
-        val PrefsSearchFeed = PageItem(
-            titleId = R.string.title__general_search_feed,
-            icon = Phosphor.MagnifyingGlass,
-            route = NavRoute.Search()
-        )
-        val PrefsGesturesDash = PageItem(
-            titleId = R.string.title__general_gestures_dash,
-            icon = Phosphor.ScribbleLoop,
-            route = NavRoute.Gestures()
-        )
-        val PrefsBackup = PageItem(
-            titleId = R.string.backups,
-            icon = Phosphor.ClockCounterClockwise,
-            route = NavRoute.Backup()
         )
         val PrefsDeveloper = PageItem(
             titleId = R.string.developer_options_title,

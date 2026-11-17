@@ -1436,7 +1436,6 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
                     // test for a large move if a fling has been registered. That is, a large
                     // move to the left and fling to the right will register as a fling to the right.
                     boolean cycleScrolling = prefs.getDesktopCycleScrolling().getValue();
-                    boolean feedEnabled = prefs.getFeedEnable().getValue();
 
                     if (((isSignificantMove && !isDeltaLeft && !isFling) ||
                             (isFling && !isVelocityLeft)) && mCurrentPage > 0) {
@@ -1450,7 +1449,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
                     } else if (mCurrentPage == getChildCount() - 1 && cycleScrolling) {
                         finalPage = returnToOriginalPage ? mCurrentPage : 0;
                         snapToPageWithVelocity(finalPage, velocity);
-                    } else if (mCurrentPage == 0 && cycleScrolling && !feedEnabled) {
+                    } else if (mCurrentPage == 0 && cycleScrolling) {
                         finalPage = returnToOriginalPage ? mCurrentPage : getChildCount() - 1;
                         snapToPageWithVelocity(finalPage, velocity);
 

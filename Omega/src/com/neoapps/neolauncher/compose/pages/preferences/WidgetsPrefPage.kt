@@ -50,7 +50,6 @@ import com.neoapps.neolauncher.preferences.IntentLauncherPref
 import com.neoapps.neolauncher.preferences.StringMultiSelectionPref
 import com.neoapps.neolauncher.preferences.StringSelectionPref
 import com.neoapps.neolauncher.preferences.StringTextPref
-import com.neoapps.neolauncher.smartspace.weather.OWMWeatherProvider
 import com.neoapps.neolauncher.util.prefs
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,24 +62,6 @@ fun WidgetsPrefsPage() {
     val onPrefDialog = { pref: Any ->
         dialogPref = pref
         openDialog.value = true
-    }
-    val smartspacePrefs = remember(prefs.changePoker.collectAsState(initial = 1).value) {
-        val isOwm =
-            prefs.smartspaceWeatherProvider.getStringValue() == OWMWeatherProvider::class.java.name
-        mutableStateListOf(
-            *listOfNotNull(
-                prefs.smartspaceEnable,
-                prefs.smartspaceBackground,
-                prefs.smartspaceDate,
-                prefs.smartspaceTime,
-                prefs.smartspaceTime24H,
-                prefs.smartspaceWeatherProvider,
-                if (isOwm) prefs.smartspaceWeatherApiKey else null,
-                if (isOwm) prefs.smartspaceWeatherCity else null,
-                prefs.smartspaceWeatherUnit,
-                prefs.smartspaceEventProviders
-            ).toTypedArray()
-        )
     }
 
     val notificationsPrefs = remember(prefs.changePoker.collectAsState(initial = 1).value) {
@@ -108,13 +89,6 @@ fun WidgetsPrefsPage() {
             contentPadding = paddingValues,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            item {
-                PreferenceGroup(
-                    stringResource(id = R.string.title__general_smartspace),
-                    prefs = smartspacePrefs,
-                    onPrefDialog = onPrefDialog
-                )
-            }
             item {
                 PreferenceGroup(
                     stringResource(id = R.string.event_provider_unread_notifications),

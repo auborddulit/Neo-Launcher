@@ -44,35 +44,16 @@ import com.android.launcher3.util.SettingsCache
 import com.neoapps.neolauncher.DeviceProfileOverrides
 import com.neoapps.neolauncher.compose.navigation.NavRoute
 import com.neoapps.neolauncher.compose.views.IconShapeIcon
-import com.neoapps.neolauncher.dash.actionprovider.DeviceSettings
-import com.neoapps.neolauncher.dash.actionprovider.EditDash
-import com.neoapps.neolauncher.dash.actionprovider.LaunchAssistant
-import com.neoapps.neolauncher.dash.actionprovider.ManageVolume
-import com.neoapps.neolauncher.dash.controlprovider.MobileData
-import com.neoapps.neolauncher.dash.controlprovider.Wifi
-import com.neoapps.neolauncher.dash.dashProviderOptions
-import com.neoapps.neolauncher.gestures.BlankGestureHandler
-import com.neoapps.neolauncher.gestures.handlers.DesktopBubbleGestureHandler
-import com.neoapps.neolauncher.gestures.handlers.NotificationsOpenGestureHandler
-import com.neoapps.neolauncher.gestures.handlers.OpenDashGestureHandler
-import com.neoapps.neolauncher.gestures.handlers.OpenDrawerGestureHandler
-import com.neoapps.neolauncher.gestures.handlers.OpenOverviewGestureHandler
-import com.neoapps.neolauncher.gestures.handlers.StartGlobalSearchGestureHandler
+import com.neoapps.neolauncher.data.SearchProviderRepository
 import com.neoapps.neolauncher.groups.AppGroupsManager
 import com.neoapps.neolauncher.groups.category.DrawerTabs
 import com.neoapps.neolauncher.iconpack.IconPackInfo
 import com.neoapps.neolauncher.iconpack.IconPackProvider
 import com.neoapps.neolauncher.icons.CustomAdaptiveIconDrawable
 import com.neoapps.neolauncher.icons.IconShape
-import com.neoapps.neolauncher.search.SearchProviderController
-import com.neoapps.neolauncher.smartspace.Temperature
-import com.neoapps.neolauncher.smartspace.provider.BatteryStatusProvider
-import com.neoapps.neolauncher.smartspace.provider.NowPlayingProvider
-import com.neoapps.neolauncher.smartspace.weather.GoogleWeatherProvider
 import com.neoapps.neolauncher.theme.AccentColorOption
 import com.neoapps.neolauncher.util.Config
 import com.neoapps.neolauncher.util.CustomPreferencesMigration
-import com.neoapps.neolauncher.util.getFeedProviders
 import com.neoapps.neolauncher.util.languageOptions
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
@@ -573,11 +554,12 @@ class NeoPrefs private constructor(val context: Context) {
     )
 
     // Dock
+    // NEO (lite build): the dock is hidden and its settings page removed.
     var dockEnabled = BooleanPref(
         dataStore = dataStore,
         key = PrefKey.DOCK_ENABLED,
         titleId = R.string.title__dock_hide,
-        defaultValue = true,
+        defaultValue = false,
         onChange = { reloadGrid() }
     )
     var dockExpandable = BooleanPref(
@@ -952,7 +934,7 @@ class NeoPrefs private constructor(val context: Context) {
         navRoute = NavRoute.Drawer.Folders()
     )
 
-    // Notifications & Widgets/Smartspace
+    // Notifications
     val notificationDots = IntentLauncherPref(
         dataStore = dataStore,
         key = PrefKey.NOTIFICATION_DOTS,
@@ -1036,107 +1018,6 @@ class NeoPrefs private constructor(val context: Context) {
         navRoute = NavRoute.Widgets.NotificationDots(),
     )
 
-    val smartspaceEnable = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.WIDGETS_SMARTSPACE_ENABLED,
-        titleId = R.string.title_smartspace,
-        defaultValue = false,
-        onChange = { restart() }
-    )
-
-    val smartspaceBackground = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.WIDGETS_SMARTSPACE_BACKGROUND,
-        titleId = R.string.title_smartspace_background,
-        defaultValue = false,
-    )
-
-    val smartspaceDate = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.WIDGETS_SMARTSPACE_DATE,
-        titleId = R.string.title_smartspace_date,
-        defaultValue = true,
-        onChange = { pokeChange() }
-    )
-
-    val smartspaceCalendar = StringSelectionPref(
-        dataStore = dataStore,
-        key = PrefKey.WIDGETS_SMARTSPACE_CALENDAR,
-        titleId = R.string.title_smartspace_calendar,
-        defaultValue = context.getString(R.string.smartspace_calendar_gregorian),
-        entries = Config.calendarOptions(context)
-    )
-
-    val smartspaceTime = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.WIDGETS_SMARTSPACE_TIME,
-        titleId = R.string.title_smartspace_time,
-        defaultValue = true,
-        onChange = { pokeChange() }
-    )
-
-    val smartspaceTime24H = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.WIDGETS_SMARTSPACE_TIME_24H,
-        titleId = R.string.title_smartspace_time_24_h,
-        defaultValue = false,
-        onChange = { restart() }
-    )
-
-    var smartspaceWeatherApiKey = StringTextPref(
-        dataStore = dataStore,
-        key = PrefKey.WIDGETS_SMARTSPACE_WEATHER_API_KEY,
-        titleId = R.string.weather_api_key,
-        defaultValue = "",
-    )
-
-    var smartspaceWeatherCity = StringTextPref(
-        dataStore = dataStore,
-        key = PrefKey.WIDGETS_SMARTSPACE_WEATHER_CITY,
-        titleId = R.string.weather_city,
-        defaultValue = "##Auto",
-        autoValue = "##Auto",
-        onChange = {
-            pokeChange()
-        }
-    )
-
-    val smartspaceWeatherUnit = StringSelectionPref(
-        dataStore = dataStore,
-        key = PrefKey.WIDGETS_SMARTSPACE_WEATHER_UNIT,
-        titleId = R.string.title_smartspace_weather_units,
-        defaultValue = Temperature.Unit.Celsius.toString(),
-        entries = temperatureUnitOptions,
-        onChange = { recreate() }
-    )
-
-    var smartspaceWeatherProvider = TwoStatePref(
-        dataStore = dataStore,
-        key1 = PrefKey.WIDGETS_SMARTSPACE_WEATHER_ENABLED,
-        key2 = PrefKey.WIDGETS_SMARTSPACE_WEATHER_PROVIDER,
-        titleId = R.string.title_smartspace_widget_enable,
-        summaryId = R.string.title_smartspace_widget_provider,
-        defaultValue1 = false,
-        defaultValue2 = "none",
-        entries = Config.smartspaceWeatherProviders(context).filter { it.key != "none" },
-        onChange = {
-            recreate()
-        }
-    )
-
-    var smartspaceEventProviders = StringMultiSelectionPref(
-        dataStore = dataStore,
-        key = PrefKey.WIDGETS_SMARTSPACE_EVENTS_PROVIDER,
-        titleId = R.string.title_smartspace_event_providers,
-        defaultValue = setOf(
-            GoogleWeatherProvider::class.java.name,
-            BatteryStatusProvider::class.java.name,
-            NowPlayingProvider::class.java.name
-        ),
-        entries = Config.smartspaceEventProviders,
-        onChange = { pokeChange() }
-    )
-
     val notificationCountFolder = BooleanPref(
         dataStore = dataStore,
         key = PrefKey.NOTIFICATION_DOTS_FOLDER_ENABLED,
@@ -1144,36 +1025,25 @@ class NeoPrefs private constructor(val context: Context) {
         defaultValue = true,
     )
 
-    // Search & Feed
+    // Drawer search
+    // Kept only for the search provider database (SearchProviderRepository); not shown in the UI.
+    var searchProviders = LongMultiSelectionPref(
+        dataStore = dataStore,
+        titleId = R.string.title_search_providers,
+        key = PrefKey.SEARCH_PROVIDERS,
+        defaultValue = setOf(1L),
+        entries = {
+            getKoin().get<SearchProviderRepository>().allProviders.value
+                .associate { Pair(it.id, it.name) }
+        },
+    )
+
     val searchDrawerEnabled = BooleanPref(
         dataStore = dataStore,
         key = PrefKey.SEARCH_DRAWER_ENABLED,
         titleId = R.string.title_all_apps_search,
         defaultValue = true,
         onChange = { recreate() }
-    )
-
-    val searchDockEnabled = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.SEARCH_DOCK_ENABLED,
-        titleId = R.string.title_all_apps_search,
-        defaultValue = false,
-    )
-
-    var searchProvidersEdit = NavigationPref(
-        dataStore = dataStore,
-        key = PrefKey.SEARCH_PROVIDERS_EDIT,
-        titleId = R.string.title_search_providers,
-        summaryId = R.string.edit_search_summary,
-        navRoute = NavRoute.Search.SearchProviders(),
-    )
-
-    var searchProviders = LongMultiSelectionPref(
-        dataStore = dataStore,
-        titleId = R.string.title_search_providers,
-        key = PrefKey.SEARCH_PROVIDERS,
-        defaultValue = setOf(1L),
-        entries = { SearchProviderController.getSearchProvidersMap() },
     )
 
     /*var searchProvider = StringSelectionPref(
@@ -1183,21 +1053,6 @@ class NeoPrefs private constructor(val context: Context) {
         defaultValue = "",
         entries = getSearchProvidersMap(context),
     )*/
-
-    val searchShowMic = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.SEARCH_SHOW_MIC,
-        titleId = R.string.title__search_show_assistant,
-        defaultValue = false
-    )
-
-    val searchShowAssistant = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.SEARCH_SHOW_ASSISTANT,
-        titleId = R.string.title__search_action_assistant,
-        summaryId = R.string.summary__search_show_as_assistant_summary,
-        defaultValue = false
-    )
 
     val searchHiddenApps = BooleanPref(
         dataStore = dataStore,
@@ -1216,152 +1071,6 @@ class NeoPrefs private constructor(val context: Context) {
         defaultValue = false,
     )
 
-    var searchGlobal = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.SEARCH_GLOBAL_ENABLED,
-        titleId = R.string.title_all_apps_google_search,
-        summaryId = R.string.summary_all_apps_google_search,
-        defaultValue = true,
-    )
-
-    var searchContacts = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.SEARCH_CONTACTS_ENABLED,
-        titleId = R.string.title_search_contacts,
-        defaultValue = false,
-    )
-
-    var feedEnable = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.FEED_ENABLE,
-        titleId = R.string.title_enable_feed,
-        defaultValue = false,
-    )
-
-    var feedProvider = TwoStatePref(
-        dataStore = dataStore,
-        key1 = PrefKey.FEED_ENABLE,
-        key2 = PrefKey.FEED_PROVIDER,
-        titleId = R.string.title_feed_provider,
-        summaryId = R.string.title_smartspace_widget_provider,
-        defaultValue1 = false,
-        defaultValue2 = "",
-        entries = context.getFeedProviders(),
-        onChange = { reloadModel() }
-    )
-
-    // GESTURES & Dash
-    var gestureDoubleTap = GesturePref(
-        titleId = R.string.gesture_double_tap,
-        dataStore = dataStore,
-        key = PrefKey.GESTURES_DOUBLE_TAP,
-        defaultValue = OpenDashGestureHandler(context, null).toString(),
-    )
-
-    var gestureLongPress = GesturePref(
-        titleId = R.string.gesture_long_press,
-        dataStore = dataStore,
-        key = PrefKey.GESTURES_LONG_TAP,
-        defaultValue = DesktopBubbleGestureHandler(context, null).toString(),
-    )
-
-    var gesturePinchIn = GesturePref(
-        titleId = R.string.gesture_pinch_in,
-        dataStore = dataStore,
-        key = PrefKey.GESTURES_PINCH_IN,
-        defaultValue = OpenOverviewGestureHandler(context, null).toString(),
-    )
-
-    var gesturePinchOut = GesturePref(
-        titleId = R.string.gesture_pinch_out,
-        dataStore = dataStore,
-        key = PrefKey.GESTURES_PINCH_OUT,
-        defaultValue = BlankGestureHandler(context, null).toString(),
-    )
-
-    var gestureHomePress = GesturePref(
-        titleId = R.string.gesture_press_home,
-        dataStore = dataStore,
-        key = PrefKey.GESTURES_HOME_PRESS,
-        defaultValue = BlankGestureHandler(context, null).toString(),
-    )
-
-    var gestureSwipeDown = GesturePref(
-        titleId = R.string.title__gesture_swipe_down,
-        key = PrefKey.GESTURES_SWIPE_DOWN,
-        dataStore = dataStore,
-        defaultValue = NotificationsOpenGestureHandler(context, null).toString(),
-    )
-
-    var gestureSwipeUp = GesturePref(
-        titleId = R.string.gesture_swipe_up,
-        key = PrefKey.GESTURES_SWIPE_UP,
-        dataStore = dataStore,
-        defaultValue = OpenDrawerGestureHandler(context, null).toString(),
-    )
-
-    var gestureDockSwipeUp = GesturePref(
-        titleId = R.string.gesture_dock_swipe_up,
-        key = PrefKey.GESTURES_SWIPE_UP_DOCK,
-        dataStore = dataStore,
-        defaultValue = StartGlobalSearchGestureHandler(context, null).toString(),
-    )
-
-    var gestureBackPress = GesturePref(
-        titleId = R.string.gesture_press_back,
-        dataStore = dataStore,
-        key = PrefKey.GESTURES_BACK_PRESS,
-        defaultValue = BlankGestureHandler(context, null).toString(),
-    )
-
-    var gestureLaunchAssistant = GesturePref(
-        titleId = R.string.gesture_launch_assistant,
-        dataStore = dataStore,
-        key = PrefKey.GESTURES_LAUNCH_ASSISTANT,
-        defaultValue = BlankGestureHandler(context, null).toString(),
-    )
-
-    var dashLineSize = IntPref(
-        dataStore = dataStore,
-        key = PrefKey.DASH_LINE_SIZE,
-        titleId = R.string.dash_line_size,
-        defaultValue = 6,
-        maxValue = 6,
-        minValue = 4,
-        steps = 1,
-    )
-
-    var dashProvidersItems = StringMultiSelectionPref(
-        dataStore = dataStore,
-        key = PrefKey.DASH_PROVIDERS,
-        titleId = R.string.edit_dash,
-        summaryId = R.string.edit_dash_summary,
-        defaultValue = setOf(
-            Wifi::class.java.name,
-            MobileData::class.java.name,
-            DeviceSettings::class.java.name,
-            LaunchAssistant::class.java.name,
-            ManageVolume::class.java.name,
-            EditDash::class.java.name,
-        ),
-        entries = dashProviderOptions
-    )
-
-    var dashEdit = NavigationPref(
-        dataStore = dataStore,
-        key = PrefKey.DASH_EDIT,
-        titleId = R.string.edit_dash,
-        summaryId = R.string.edit_dash_summary,
-        navRoute = NavRoute.Gestures.EditDash(),
-    )
-
-    var dashTorchState = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.DASH_TORCH_STATE,
-        titleId = R.string.dash_torch,
-        defaultValue = false,
-    )
-
 
     //Misc
     val customAppName =
@@ -1371,27 +1080,6 @@ class NeoPrefs private constructor(val context: Context) {
             override fun flattenValue(value: String) = value
             override fun unflattenValue(value: String) = value
         }
-
-    var restoreSuccess = BooleanPref(
-        key = PrefKey.PREFS_RESTORE_SUCCESS,
-        titleId = R.string.restore_success,
-        dataStore = dataStore,
-        defaultValue = false
-    )
-
-    var backupCreate = NavigationPref(
-        dataStore = dataStore,
-        key = PrefKey.BACKUP_CREATE,
-        titleId = R.string.backup_create,
-        navRoute = NavRoute.Backup.Create()
-    )
-
-    var backupRestore = NavigationPref(
-        dataStore = dataStore,
-        key = PrefKey.BACKUP_RESTORE,
-        titleId = R.string.backup_restore,
-        navRoute = NavRoute.Backup.Restore()
-    )
 
     //Dev options
     var restartLauncher = StringPref(

@@ -71,15 +71,11 @@ import com.android.launcher3.allapps.SearchUiManager
 import com.android.launcher3.allapps.search.AllAppsSearchBarController
 import com.android.launcher3.search.SearchCallback
 import com.neoapps.neolauncher.compose.icons.Phosphor
-import com.neoapps.neolauncher.compose.icons.phosphor.Nut
+import com.neoapps.neolauncher.compose.icons.phosphor.MagnifyingGlass
 import com.neoapps.neolauncher.compose.icons.phosphor.X
-import com.neoapps.neolauncher.compose.navigation.Routes
 import com.neoapps.neolauncher.launcher
 import com.neoapps.neolauncher.preferences.NeoPrefs
-import com.neoapps.neolauncher.preferences.PreferenceActivity
-import com.neoapps.neolauncher.search.SearchProviderController
 import com.neoapps.neolauncher.theme.OmegaAppTheme
-import com.neoapps.neolauncher.util.openURLInBrowser
 import com.neoapps.neolauncher.util.prefs
 
 open class ComposeSearchLayout(context: Context, attrs: AttributeSet? = null) :
@@ -93,7 +89,6 @@ open class ComposeSearchLayout(context: Context, attrs: AttributeSet? = null) :
         resources.getDimensionPixelSize(R.dimen.all_apps_search_vertical_offset)
     private val topMarginAdjustment =
         resources.getDimensionPixelSize(R.dimen.all_apps_search_top_margin_adjustment)
-    private var spController = SearchProviderController.getInstance(mContext)
     private val searchAlgorithm = NeoAppSearchAlgorithm(mContext, true)
     private val mSearchBarController: AllAppsSearchBarController = AllAppsSearchBarController()
     private var mAppsView: ActivityAllAppsContainerView<*>? = null
@@ -116,15 +111,6 @@ open class ComposeSearchLayout(context: Context, attrs: AttributeSet? = null) :
             focusManager = LocalFocusManager.current
             keyboardController = LocalSoftwareKeyboardController.current
             textFieldFocusRequester = remember { FocusRequester() }
-            val searchProviderSelector by spController.searchProviderSelector.collectAsState(0)
-            val searchProviders by spController.searchProvidersState.collectAsState()
-            val searchProvider =
-                remember { derivedStateOf { searchProviders[searchProviderSelector] } }
-            val searchIcon = rememberAsyncImagePainter(searchProvider.value.iconId)
-            /*val micIcon = rememberDrawablePainter(
-                drawable = if (searchProvider.supportsAssistant) searchProvider.assistantIcon
-                else searchProvider.voiceIcon
-            )*/
 
             var radius by remember { mutableFloatStateOf(0f) }
             val radiusPrefs = prefs.profileWindowCornerRadius.get().collectAsState(initial = 0f)
@@ -167,20 +153,12 @@ open class ComposeSearchLayout(context: Context, attrs: AttributeSet? = null) :
                     ),
                     shape = RoundedCornerShape(radius.dp),
                     leadingIcon = {
-                        FilledIconButton(
-                            modifier = Modifier.height(IntrinsicSize.Max),
-                            shape = RoundedCornerShape(radius.dp),
-                            colors = IconButtonDefaults.filledIconButtonColors(
-                                containerColor = Color.Transparent
-                            ),
-                            onClick = { spController.changeSearchProvider() }
-                        ) {
-                            Image(
-                                modifier = Modifier.size(24.dp),
-                                painter = searchIcon,
-                                contentDescription = stringResource(id = R.string.label_search),
-                            )
-                        }
+                        Icon(
+                            modifier = Modifier.size(24.dp),
+                            imageVector = Phosphor.MagnifyingGlass,
+                            contentDescription = stringResource(id = R.string.label_search),
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
                     },
                     trailingIcon = {
                         Row {
@@ -198,25 +176,6 @@ open class ComposeSearchLayout(context: Context, attrs: AttributeSet? = null) :
                                     )
                                 }
                             }
-                            /*AnimatedVisibility(visible = searchProvider.supportsVoiceSearch) {
-                                IconButton(onClick = {
-                                    if (searchProvider.supportsAssistant) {
-                                        searchProvider.startAssistant { intent ->
-                                            context.startActivity(intent)
-                                        }
-                                    } else {
-                                        searchProvider.startVoiceSearch { intent ->
-                                            context.startActivity(intent)
-                                        }
-                                    }
-                                }) {
-                                    Icon(
-                                        modifier = Modifier.size(24.dp),
-                                        painter = micIcon,
-                                        contentDescription = stringResource(id = R.string.label_voice_search),
-                                    )
-                                }
-                            }*/
                         }
                     },
                     label = {
@@ -233,17 +192,6 @@ open class ComposeSearchLayout(context: Context, attrs: AttributeSet? = null) :
                         onSearch = { onSubmitSearch(query.value) },
                     ),
                 )
-                IconButton(onClick = {
-                    mContext.startActivity(
-                        PreferenceActivity.navigateIntent(mContext, Routes.PREFS_SEARCH)
-                    )
-                }) {
-                    Icon(
-                        imageVector = Phosphor.Nut,
-                        contentDescription = stringResource(id = R.string.widgets_full_sheet_cancel_button_description),
-                        tint = MaterialTheme.colorScheme.onSurface
-                    )
-                }
             }
         }
     }
@@ -316,14 +264,9 @@ open class ComposeSearchLayout(context: Context, attrs: AttributeSet? = null) :
 
     override fun getEditText(): ExtendedEditText? = null
 
+    /** Pressing "search" on the keyboard opens the first matching app. */
     fun onSubmitSearch(query: String?): Boolean =
-        if (spController.activeSearchProvider.searchUrl.isNotEmpty()) {
-            openURLInBrowser(context, spController.activeSearchProvider.searchUrl.format(query))
-            true
-        } else {
-            context.launcher.appsView.mainAdapterProvider.launchHighlightedItem()
-            false
-        }
+        context.launcher.appsView.mainAdapterProvider.launchHighlightedItem()
 
     override fun setInsets(insets: Rect) {
         val mlp = layoutParams as MarginLayoutParams

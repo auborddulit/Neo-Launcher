@@ -100,6 +100,12 @@ fun DrawerPrefsPage() {
         )
     }
 
+    val searchPrefs = listOf(
+        prefs.searchDrawerEnabled,
+        prefs.searchFuzzy,
+        prefs.searchHiddenApps,
+    )
+
     val otherPrefs = remember(prefs.changePoker.collectAsState(initial = 1).value) {
         mutableStateListOf(
             *listOfNotNull(
@@ -135,6 +141,12 @@ fun DrawerPrefsPage() {
                 PreferenceGroup(
                     stringResource(id = R.string.cat_drawer_grid),
                     prefs = gridPrefs,
+                    onPrefDialog = onPrefDialog
+                )
+
+                PreferenceGroup(
+                    stringResource(id = R.string.label_search),
+                    prefs = searchPrefs,
                     onPrefDialog = onPrefDialog
                 )
 

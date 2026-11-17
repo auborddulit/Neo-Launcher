@@ -46,6 +46,7 @@ import com.android.launcher3.BuildConfig;
 import com.android.launcher3.Flags;
 import com.android.launcher3.InvariantDeviceProfile;
 import com.android.launcher3.Launcher;
+import com.android.launcher3.LauncherState;
 import com.android.launcher3.LauncherSettings;
 import com.android.launcher3.R;
 import com.android.launcher3.Utilities;
@@ -77,6 +78,7 @@ import com.android.launcher3.widget.WidgetManagerHelper;
 import com.neoapps.neolauncher.NeoLauncher;
 import com.neoapps.neolauncher.data.AppTrackerRepository;
 import com.neoapps.neolauncher.preferences.NeoPrefs;
+import com.neoapps.neolauncher.shortcuts.OpenAppDrawerShortcut;
 import com.neoapps.neolauncher.util.Config;
 
 import java.util.Collections;
@@ -376,6 +378,12 @@ public class ItemClickHandler {
      * @param v The view that was clicked. Must be a tagged with a {@link WorkspaceItemInfo}.
      */
     public static void onClickAppShortcut(View v, WorkspaceItemInfo shortcut, Launcher launcher) {
+        // NEO: "Open app drawer" shortcut. Handled in-process: starting an activity here
+        // (as Neo 0.9.x did) lets Android bring the last used app to the front instead.
+        if (OpenAppDrawerShortcut.matches(launcher, shortcut)) {
+            launcher.getStateManager().goToState(LauncherState.ALL_APPS);
+            return;
+        }
         if (shortcut.isDisabled() && handleDisabledItemClicked(shortcut, launcher)) {
             return;
         }

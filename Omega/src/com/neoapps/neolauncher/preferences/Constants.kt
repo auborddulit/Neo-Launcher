@@ -1,29 +1,6 @@
 package com.neoapps.neolauncher.preferences
 
 import com.android.launcher3.R
-import com.neoapps.neolauncher.dash.actionprovider.AllAppsShortcut
-import com.neoapps.neolauncher.dash.actionprovider.AudioPlayer
-import com.neoapps.neolauncher.dash.actionprovider.ChangeWallpaper
-import com.neoapps.neolauncher.dash.actionprovider.DeviceSettings
-import com.neoapps.neolauncher.dash.actionprovider.EditDash
-import com.neoapps.neolauncher.dash.actionprovider.LaunchAssistant
-import com.neoapps.neolauncher.dash.actionprovider.ManageApps
-import com.neoapps.neolauncher.dash.actionprovider.ManageVolume
-import com.neoapps.neolauncher.dash.actionprovider.OmegaSettings
-import com.neoapps.neolauncher.dash.actionprovider.SleepDevice
-import com.neoapps.neolauncher.dash.actionprovider.Torch
-import com.neoapps.neolauncher.dash.controlprovider.AutoRotation
-import com.neoapps.neolauncher.dash.controlprovider.Bluetooth
-import com.neoapps.neolauncher.dash.controlprovider.Location
-import com.neoapps.neolauncher.dash.controlprovider.MobileData
-import com.neoapps.neolauncher.dash.controlprovider.Sync
-import com.neoapps.neolauncher.dash.controlprovider.Wifi
-import com.neoapps.neolauncher.smartspace.Temperature
-import com.neoapps.neolauncher.smartspace.provider.AlarmEventProvider
-import com.neoapps.neolauncher.smartspace.provider.BatteryStatusProvider
-import com.neoapps.neolauncher.smartspace.provider.CalendarEventProvider
-import com.neoapps.neolauncher.smartspace.provider.NotificationUnreadProvider
-import com.neoapps.neolauncher.smartspace.provider.NowPlayingProvider
 
 const val PREFS_LANGUAGE_DEFAULT_NAME = "System"
 const val PREFS_LANGUAGE_DEFAULT_CODE = "en"
@@ -76,50 +53,12 @@ val drawerLayoutOptions = mutableMapOf(
     LAYOUT_TABS to R.string.title_drawer_tabs
 )
 
-val temperatureUnitOptions = listOfNotNull(
-    Temperature.Unit.Celsius,
-    Temperature.Unit.Fahrenheit,
-    Temperature.Unit.Kelvin,
-    Temperature.Unit.Rakine,
-    Temperature.Unit.Delisle,
-    Temperature.Unit.Newton,
-    Temperature.Unit.Reaumur,
-    Temperature.Unit.Romer
-).associateBy(
-    keySelector = { it.toString() },
-    valueTransform = { "${it.name} (${it.suffix})" }
-)
-
 
 val iconIds = mapOf(
-    //Events
-    BatteryStatusProvider::class.java.name to R.drawable.ic_battery_low,
-    NowPlayingProvider::class.java.name to R.drawable.ic_music_play,
-    CalendarEventProvider::class.java.name to R.drawable.ic_calendar,
-    AlarmEventProvider::class.java.name to R.drawable.ic_alarm_on_black_24dp,
-    NotificationUnreadProvider::class.java.name to R.drawable.ic_smartspace_preferences,
     // Desktop Popup
     PREFS_DESKTOP_POPUP_EDIT to R.drawable.ic_edit_no_shadow,
     PREFS_DESKTOP_POPUP_UNINSTALL to R.drawable.ic_uninstall_no_shadow,
     // Drawer Popup
     PREFS_DRAWER_POPUP_UNINSTALL to R.drawable.ic_uninstall_no_shadow,
     PREFS_DRAWER_POPUP_EDIT to R.drawable.ic_edit_no_shadow,
-    // Dash Providers
-    EditDash::class.java.name to R.drawable.ic_edit_dash,
-    ChangeWallpaper::class.java.name to R.drawable.ic_palette,
-    OmegaSettings::class.java.name to R.drawable.ic_omega_settings,
-    ManageVolume::class.java.name to R.drawable.ic_volume,
-    DeviceSettings::class.java.name to R.drawable.ic_setting,
-    ManageApps::class.java.name to R.drawable.ic_build,
-    AllAppsShortcut::class.java.name to R.drawable.ic_apps,
-    SleepDevice::class.java.name to R.drawable.ic_sleep,
-    LaunchAssistant::class.java.name to R.drawable.ic_assistant,
-    Torch::class.java.name to R.drawable.ic_torch,
-    AudioPlayer::class.java.name to R.drawable.ic_music_play,
-    Wifi::class.java.name to R.drawable.ic_wifi,
-    MobileData::class.java.name to R.drawable.ic_mobile_network,
-    Location::class.java.name to R.drawable.ic_location,
-    Bluetooth::class.java.name to R.drawable.ic_bluetooth,
-    AutoRotation::class.java.name to R.drawable.ic_auto_rotation,
-    Sync::class.java.name to R.drawable.ic_sync,
 )
