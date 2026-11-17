@@ -28,7 +28,18 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Compile with Gradle
-        run: ./gradlew assembleAospOmega
+        run: |
+          set -o pipefail
+          ./gradlew assembleAospOmegaDebug --continue 2>&1 | tee build.log
+
+      # Report compiler errors as a single annotation so they are readable from the PR.
+      - name: Report build errors
+        if: failure()
+        run: |
+          grep -E '^e: |error:|\* What went wrong|FAILURE|Execution failed|AAPT|resource .* not found' build.log \
+            | sed 's#/home/runner/work/[^/]*/[^/]*/##' | head -c 60000 > errors.txt || true
+          msg=$(sed -e 's/%/%25/g' errors.txt | awk 'BEGIN{ORS="%0A"} {print}')
+          echo "::error title=Build errors::${msg}"
 
       - name: Save name of our Artifact
         id: set-result-artifact
