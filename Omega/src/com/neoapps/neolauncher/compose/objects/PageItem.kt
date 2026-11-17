@@ -63,11 +63,6 @@ open class PageItem(
             icon = Phosphor.MagnifyingGlass,
             route = NavRoute.Search()
         )
-        val PrefsGesturesDash = PageItem(
-            titleId = R.string.title__general_gestures_dash,
-            icon = Phosphor.ScribbleLoop,
-            route = NavRoute.Gestures()
-        )
         val PrefsDeveloper = PageItem(
             titleId = R.string.developer_options_title,
             icon = Phosphor.BracketsCurly,

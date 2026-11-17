@@ -1,23 +1,6 @@
 package com.neoapps.neolauncher.preferences
 
 import com.android.launcher3.R
-import com.neoapps.neolauncher.dash.actionprovider.AllAppsShortcut
-import com.neoapps.neolauncher.dash.actionprovider.AudioPlayer
-import com.neoapps.neolauncher.dash.actionprovider.ChangeWallpaper
-import com.neoapps.neolauncher.dash.actionprovider.DeviceSettings
-import com.neoapps.neolauncher.dash.actionprovider.EditDash
-import com.neoapps.neolauncher.dash.actionprovider.LaunchAssistant
-import com.neoapps.neolauncher.dash.actionprovider.ManageApps
-import com.neoapps.neolauncher.dash.actionprovider.ManageVolume
-import com.neoapps.neolauncher.dash.actionprovider.OmegaSettings
-import com.neoapps.neolauncher.dash.actionprovider.SleepDevice
-import com.neoapps.neolauncher.dash.actionprovider.Torch
-import com.neoapps.neolauncher.dash.controlprovider.AutoRotation
-import com.neoapps.neolauncher.dash.controlprovider.Bluetooth
-import com.neoapps.neolauncher.dash.controlprovider.Location
-import com.neoapps.neolauncher.dash.controlprovider.MobileData
-import com.neoapps.neolauncher.dash.controlprovider.Sync
-import com.neoapps.neolauncher.dash.controlprovider.Wifi
 import com.neoapps.neolauncher.smartspace.Temperature
 import com.neoapps.neolauncher.smartspace.provider.AlarmEventProvider
 import com.neoapps.neolauncher.smartspace.provider.BatteryStatusProvider
@@ -104,22 +87,4 @@ val iconIds = mapOf(
     // Drawer Popup
     PREFS_DRAWER_POPUP_UNINSTALL to R.drawable.ic_uninstall_no_shadow,
     PREFS_DRAWER_POPUP_EDIT to R.drawable.ic_edit_no_shadow,
-    // Dash Providers
-    EditDash::class.java.name to R.drawable.ic_edit_dash,
-    ChangeWallpaper::class.java.name to R.drawable.ic_palette,
-    OmegaSettings::class.java.name to R.drawable.ic_omega_settings,
-    ManageVolume::class.java.name to R.drawable.ic_volume,
-    DeviceSettings::class.java.name to R.drawable.ic_setting,
-    ManageApps::class.java.name to R.drawable.ic_build,
-    AllAppsShortcut::class.java.name to R.drawable.ic_apps,
-    SleepDevice::class.java.name to R.drawable.ic_sleep,
-    LaunchAssistant::class.java.name to R.drawable.ic_assistant,
-    Torch::class.java.name to R.drawable.ic_torch,
-    AudioPlayer::class.java.name to R.drawable.ic_music_play,
-    Wifi::class.java.name to R.drawable.ic_wifi,
-    MobileData::class.java.name to R.drawable.ic_mobile_network,
-    Location::class.java.name to R.drawable.ic_location,
-    Bluetooth::class.java.name to R.drawable.ic_bluetooth,
-    AutoRotation::class.java.name to R.drawable.ic_auto_rotation,
-    Sync::class.java.name to R.drawable.ic_sync,
 )

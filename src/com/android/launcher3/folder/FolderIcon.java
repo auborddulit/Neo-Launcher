@@ -92,10 +92,6 @@ import com.android.launcher3.views.FloatingIconViewCompanion;
 import com.android.launcher3.widget.PendingAddShortcutInfo;
 import com.neoapps.neolauncher.NeoLauncher;
 import com.neoapps.neolauncher.data.IconOverrideRepository;
-import com.neoapps.neolauncher.gestures.BlankGestureHandler;
-import com.neoapps.neolauncher.gestures.GestureHandler;
-import com.neoapps.neolauncher.gestures.RunnableGestureHandler;
-import com.neoapps.neolauncher.gestures.handlers.ViewSwipeUpGestureHandler;
 import com.neoapps.neolauncher.groups.category.DrawerFolderInfo;
 import com.neoapps.neolauncher.iconpack.IconPackProvider;
 import com.neoapps.neolauncher.preferences.NeoPrefs;
@@ -163,7 +159,6 @@ public class FolderIcon extends FrameLayout implements FloatingIconViewCompanion
      */
     @Nullable
     private Drawable mOverrideDrawable = null;
-    private GestureHandler mSwipeUpHandler;
 
     private static final Property<FolderIcon, Float> DOT_SCALE_PROPERTY
             = new Property<FolderIcon, Float>(Float.TYPE, "dotScale") {
@@ -882,23 +877,13 @@ public class FolderIcon extends FrameLayout implements FloatingIconViewCompanion
         super.onTouchEvent(event);
         mLongPressHelper.onTouchEvent(event);
         // Keep receiving the rest of the events
-        Launcher launcher = ContextExtensionsKt.getLauncherOrNull(getContext());
-        if (launcher instanceof NeoLauncher && mSwipeUpHandler != null) {
-            ((NeoLauncher) launcher).getGestureController()
-                    .setSwipeUpOverride(mSwipeUpHandler, event.getDownTime());
-        }
         return true;
     }
 
     private void applyTouchActions(FolderInfo info) {
-        mSwipeUpHandler = info.isCoverMode() ?
-                new RunnableGestureHandler(getContext(), () -> ItemClickHandler.INSTANCE.onClick(this))
-                : new BlankGestureHandler(getContext(), null); // GestureController.Companion.createGestureHandler(getContext(), info.swipeUpAction, new BlankGestureHandler(getContext(), null));
-        if (mSwipeUpHandler instanceof BlankGestureHandler) {
-            mSwipeUpHandler = null;
-        } else {
-            mSwipeUpHandler = new ViewSwipeUpGestureHandler(this, mSwipeUpHandler);
-        }
+        setOnClickListener(info.isCoverMode() ?
+                ItemClickHandler.FOLDER_COVER_INSTANCE : ItemClickHandler.INSTANCE);
+    }
         setOnClickListener(mInfo.isCoverMode() ?
                 ItemClickHandler.FOLDER_COVER_INSTANCE : ItemClickHandler.INSTANCE);
     }

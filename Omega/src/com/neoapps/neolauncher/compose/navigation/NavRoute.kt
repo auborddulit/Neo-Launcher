@@ -65,15 +65,6 @@ open class NavRoute : Parcelable {
     }
 
     @Serializable
-    open class Gestures : NavRoute() {
-        @Serializable
-        data class Gesture(val key: String) : Gestures()
-
-        @Serializable
-        class EditDash : Gestures()
-    }
-
-    @Serializable
     open class Search : NavRoute() {
         @Serializable
         class SearchProviders : Search()

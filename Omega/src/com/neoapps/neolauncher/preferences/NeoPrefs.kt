@@ -44,20 +44,6 @@ import com.android.launcher3.util.SettingsCache
 import com.neoapps.neolauncher.DeviceProfileOverrides
 import com.neoapps.neolauncher.compose.navigation.NavRoute
 import com.neoapps.neolauncher.compose.views.IconShapeIcon
-import com.neoapps.neolauncher.dash.actionprovider.DeviceSettings
-import com.neoapps.neolauncher.dash.actionprovider.EditDash
-import com.neoapps.neolauncher.dash.actionprovider.LaunchAssistant
-import com.neoapps.neolauncher.dash.actionprovider.ManageVolume
-import com.neoapps.neolauncher.dash.controlprovider.MobileData
-import com.neoapps.neolauncher.dash.controlprovider.Wifi
-import com.neoapps.neolauncher.dash.dashProviderOptions
-import com.neoapps.neolauncher.gestures.BlankGestureHandler
-import com.neoapps.neolauncher.gestures.handlers.DesktopBubbleGestureHandler
-import com.neoapps.neolauncher.gestures.handlers.NotificationsOpenGestureHandler
-import com.neoapps.neolauncher.gestures.handlers.OpenDashGestureHandler
-import com.neoapps.neolauncher.gestures.handlers.OpenDrawerGestureHandler
-import com.neoapps.neolauncher.gestures.handlers.OpenOverviewGestureHandler
-import com.neoapps.neolauncher.gestures.handlers.StartGlobalSearchGestureHandler
 import com.neoapps.neolauncher.groups.AppGroupsManager
 import com.neoapps.neolauncher.groups.category.DrawerTabs
 import com.neoapps.neolauncher.iconpack.IconPackInfo
@@ -1248,118 +1234,6 @@ class NeoPrefs private constructor(val context: Context) {
         defaultValue2 = "",
         entries = context.getFeedProviders(),
         onChange = { reloadModel() }
-    )
-
-    // GESTURES & Dash
-    var gestureDoubleTap = GesturePref(
-        titleId = R.string.gesture_double_tap,
-        dataStore = dataStore,
-        key = PrefKey.GESTURES_DOUBLE_TAP,
-        defaultValue = OpenDashGestureHandler(context, null).toString(),
-    )
-
-    var gestureLongPress = GesturePref(
-        titleId = R.string.gesture_long_press,
-        dataStore = dataStore,
-        key = PrefKey.GESTURES_LONG_TAP,
-        defaultValue = DesktopBubbleGestureHandler(context, null).toString(),
-    )
-
-    var gesturePinchIn = GesturePref(
-        titleId = R.string.gesture_pinch_in,
-        dataStore = dataStore,
-        key = PrefKey.GESTURES_PINCH_IN,
-        defaultValue = OpenOverviewGestureHandler(context, null).toString(),
-    )
-
-    var gesturePinchOut = GesturePref(
-        titleId = R.string.gesture_pinch_out,
-        dataStore = dataStore,
-        key = PrefKey.GESTURES_PINCH_OUT,
-        defaultValue = BlankGestureHandler(context, null).toString(),
-    )
-
-    var gestureHomePress = GesturePref(
-        titleId = R.string.gesture_press_home,
-        dataStore = dataStore,
-        key = PrefKey.GESTURES_HOME_PRESS,
-        defaultValue = BlankGestureHandler(context, null).toString(),
-    )
-
-    var gestureSwipeDown = GesturePref(
-        titleId = R.string.title__gesture_swipe_down,
-        key = PrefKey.GESTURES_SWIPE_DOWN,
-        dataStore = dataStore,
-        defaultValue = NotificationsOpenGestureHandler(context, null).toString(),
-    )
-
-    var gestureSwipeUp = GesturePref(
-        titleId = R.string.gesture_swipe_up,
-        key = PrefKey.GESTURES_SWIPE_UP,
-        dataStore = dataStore,
-        defaultValue = OpenDrawerGestureHandler(context, null).toString(),
-    )
-
-    var gestureDockSwipeUp = GesturePref(
-        titleId = R.string.gesture_dock_swipe_up,
-        key = PrefKey.GESTURES_SWIPE_UP_DOCK,
-        dataStore = dataStore,
-        defaultValue = StartGlobalSearchGestureHandler(context, null).toString(),
-    )
-
-    var gestureBackPress = GesturePref(
-        titleId = R.string.gesture_press_back,
-        dataStore = dataStore,
-        key = PrefKey.GESTURES_BACK_PRESS,
-        defaultValue = BlankGestureHandler(context, null).toString(),
-    )
-
-    var gestureLaunchAssistant = GesturePref(
-        titleId = R.string.gesture_launch_assistant,
-        dataStore = dataStore,
-        key = PrefKey.GESTURES_LAUNCH_ASSISTANT,
-        defaultValue = BlankGestureHandler(context, null).toString(),
-    )
-
-    var dashLineSize = IntPref(
-        dataStore = dataStore,
-        key = PrefKey.DASH_LINE_SIZE,
-        titleId = R.string.dash_line_size,
-        defaultValue = 6,
-        maxValue = 6,
-        minValue = 4,
-        steps = 1,
-    )
-
-    var dashProvidersItems = StringMultiSelectionPref(
-        dataStore = dataStore,
-        key = PrefKey.DASH_PROVIDERS,
-        titleId = R.string.edit_dash,
-        summaryId = R.string.edit_dash_summary,
-        defaultValue = setOf(
-            Wifi::class.java.name,
-            MobileData::class.java.name,
-            DeviceSettings::class.java.name,
-            LaunchAssistant::class.java.name,
-            ManageVolume::class.java.name,
-            EditDash::class.java.name,
-        ),
-        entries = dashProviderOptions
-    )
-
-    var dashEdit = NavigationPref(
-        dataStore = dataStore,
-        key = PrefKey.DASH_EDIT,
-        titleId = R.string.edit_dash,
-        summaryId = R.string.edit_dash_summary,
-        navRoute = NavRoute.Gestures.EditDash(),
-    )
-
-    var dashTorchState = BooleanPref(
-        dataStore = dataStore,
-        key = PrefKey.DASH_TORCH_STATE,
-        titleId = R.string.dash_torch,
-        defaultValue = false,
     )
 
 

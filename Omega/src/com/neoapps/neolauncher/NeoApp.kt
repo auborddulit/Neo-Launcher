@@ -42,7 +42,6 @@ import java.io.File
 
 class NeoApp : Application() {
     val activityHandler = ActivityHandler()
-    var accessibilityService: OmegaAccessibilityService? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -80,18 +79,6 @@ class NeoApp : Application() {
             activityHandler.finishAll(recreateLauncher)
         } else {
             Utilities.restartLauncher(this)
-        }
-    }
-
-    fun performGlobalAction(action: Int): Boolean {
-        return if (accessibilityService != null) {
-            accessibilityService!!.performGlobalAction(action)
-        } else {
-            startActivity(
-                Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            )
-            false
         }
     }
 

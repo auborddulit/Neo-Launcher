@@ -214,29 +214,6 @@ open class NavigationPref(
     onChange: (String) -> Unit = {},
 ) : PrefDelegate<String>(titleId, summaryId, dataStore, key, defaultValue, onChange)
 
-class GesturePref(
-    @StringRes titleId: Int,
-    @StringRes summaryId: Int = -1,
-    dataStore: DataStore<Preferences>,
-    key: Preferences.Key<String>,
-    defaultValue: String = "",
-) : NavigationPref(
-    titleId = titleId,
-    summaryId = summaryId,
-    dataStore = dataStore,
-    key = key,
-    navRoute = NavRoute.Gestures.Gesture(key.name),
-    defaultValue = defaultValue,
-) {
-    operator fun getValue(thisRef: Any?, property: KProperty<*>): String {
-        return getValue()
-    }
-
-    operator fun setValue(thisRef: Any?, property: KProperty<*>, value: String) {
-        setValue(value)
-    }
-}
-
 open class StringTextPref(
     @StringRes titleId: Int,
     @StringRes summaryId: Int = -1,

@@ -1590,9 +1590,6 @@ public class Launcher extends StatefulActivity<LauncherState>
                 if (shouldMoveToDefaultScreen && !mWorkspace.isHandlingTouch()) {
                     mWorkspace.post(mWorkspace::moveToDefaultScreen);
                 }
-                if (!handled && this instanceof NeoLauncher) {
-                    ((NeoLauncher) this).getGestureController().onPressHome();
-                }
             }
 
             handleSplitAnimationGoingToHome(LAUNCHER_SPLIT_SELECTION_EXIT_HOME);
@@ -2125,10 +2122,6 @@ public class Launcher extends StatefulActivity<LauncherState>
         } else {
             if (!isInState(NORMAL)) {
                 onStateBack();
-            } else {
-                if (this instanceof NeoLauncher) {
-                    ((NeoLauncher) this).getGestureController().onPressBack();
-                }
             }
         }
     }

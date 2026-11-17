@@ -74,9 +74,6 @@ import com.android.launcher3.util.RunnableList
 import com.android.launcher3.util.TouchController
 import com.android.launcher3.views.OptionsPopupView
 import com.android.systemui.plugins.shared.LauncherOverlayManager
-import com.neoapps.neolauncher.gestures.GestureController
-import com.neoapps.neolauncher.gestures.PinchGestureController
-import com.neoapps.neolauncher.gestures.VerticalSwipeGestureController
 import com.neoapps.neolauncher.preferences.NeoPrefs
 import com.neoapps.neolauncher.preferences.PreferencesChangeCallback
 import com.neoapps.neolauncher.shortcuts.OmegaShortcuts
@@ -101,7 +98,6 @@ class NeoLauncher : Launcher(), SavedStateRegistryOwner,
     override var currentAccent = 0
     val allApps = ArrayList<AppInfo>()
     private val hiddenApps = ArrayList<AppInfo>()
-    val gestureController by lazy { GestureController(this) }
     private lateinit var themeOverride: ThemeOverride
     private val themeSet: ThemeOverride.ThemeSet get() = ThemeOverride.Settings()
     val optionsView by lazy { findViewById<OptionsPopupView<Launcher>>(R.id.options_view)!! }
@@ -123,23 +119,9 @@ class NeoLauncher : Launcher(), SavedStateRegistryOwner,
 
         MODEL_EXECUTOR.handler.postAtFrontOfQueue { loadHiddenApps(prefs.drawerHiddenAppSet.getValue()) }
 
-        val coroutineScope = CoroutineScope(Dispatchers.IO)
         val config = Config(this)
         config.setAppLanguage(prefs.profileLanguage.getValue())
         mOverlayManager = defaultOverlay
-        val camManager = getSystemService(CAMERA_SERVICE) as CameraManager?
-        camManager?.registerTorchCallback(object : CameraManager.TorchCallback() {
-            override fun onTorchModeUnavailable(cameraId: String) {
-            }
-
-            override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
-                coroutineScope.launch {
-                    if (cameraId == camManager.cameraIdList[0]) {
-                        prefs.dashTorchState.setValue(enabled)
-                    }
-                }
-            }
-        }, Handler(Looper.getMainLooper()))
 
         NeoApp.instance?.onLauncherAppStateCreated()
         themeOverride = ThemeOverride(themeSet, this)
@@ -572,8 +554,6 @@ class NeoLauncher : Launcher(), SavedStateRegistryOwner,
     override fun createTouchControllers(): Array<TouchController> {
         val list = ArrayList<TouchController>()
         list.add(dragController)
-        list.add(PinchGestureController(this))
-        list.add(VerticalSwipeGestureController(this))
 
         return list.toTypedArray() + super.createTouchControllers()
     }

@@ -71,7 +71,6 @@ import com.neoapps.neolauncher.compose.navigation.NavRoute
 import com.neoapps.neolauncher.compose.objects.PageItem
 import com.neoapps.neolauncher.compose.pages.AppCategoriesPage
 import com.neoapps.neolauncher.compose.pages.ColorSelectionPage
-import com.neoapps.neolauncher.compose.pages.GestureSelectorPage
 import com.neoapps.neolauncher.compose.pages.HiddenAppsPage
 import com.neoapps.neolauncher.compose.pages.ProtectedAppsPage
 import com.neoapps.neolauncher.compose.pages.ProtectedAppsView
@@ -105,24 +104,11 @@ fun MainPrefsPage() {
     val featuresPrefs = persistentListOf(
         PageItem.PrefsWidgetsNotifications,
         PageItem.PrefsSearchFeed,
-        PageItem.PrefsGesturesDash
     )
     val otherPrefs: List<PageItem> = listOfNotNull(
         if (showDev) PageItem.PrefsDeveloper else null,
         PageItem.PrefsAbout
     )
-    val gesturesMap = listOf(
-        prefs.gestureDoubleTap,
-        prefs.gestureLongPress,
-        prefs.gesturePinchIn,
-        prefs.gesturePinchOut,
-        prefs.gestureSwipeDown,
-        prefs.gestureSwipeUp,
-        prefs.gestureDockSwipeUp,
-        prefs.gestureHomePress,
-        prefs.gestureBackPress,
-        prefs.gestureLaunchAssistant,
-    ).associateBy { it.key.name }
     val pageData: MutableState<NavRoute?> = remember { mutableStateOf(null) }
 
     fun resolveDefaultHome(): String? {
@@ -264,9 +250,6 @@ fun MainPrefsPage() {
                         is NavRoute.Search.SearchProviders -> SearchProvidersPage()
                         is NavRoute.Search -> SearchPrefsPage()
 
-                        is NavRoute.Gestures.EditDash -> EditDashPage()
-                        is NavRoute.Gestures.Gesture -> GestureSelectorPage(gesturesMap[route.key]!!)
-                        is NavRoute.Gestures -> GesturesPrefsPage()
 
 
                         is NavRoute.Dev -> DevPrefsPage()

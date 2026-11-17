@@ -136,48 +136,6 @@
             android:name="com.neoapps.neolauncher.smartspace.SmartSpacePreferencesShortcut"
             android:theme="@style/Theme.Transparent" />
 
-        <!-- DT2S using screen timeout -->
-        <activity
-            android:name="com.neoapps.neolauncher.gestures.handlers.SleepTimeoutActivity"
-            android:theme="@style/SleepTimeoutTheme" />
-
-        <activity
-            android:name="com.neoapps.neolauncher.gestures.AssistantGestureReceiver"
-            android:exported="true"
-            android:theme="@style/SettingsTheme.Black">
-            <intent-filter>
-                <action android:name="android.intent.action.ASSIST" />
-                <action android:name="android.intent.action.SEARCH_LONG_PRESS" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <!-- DT2S using device admin -->
-        <receiver
-            android:name="com.neoapps.neolauncher.gestures.handlers.SleepMethodDeviceAdmin$SleepDeviceAdmin"
-            android:description="@string/dt2s_admin_hint"
-            android:exported="true"
-            android:permission="android.permission.BIND_DEVICE_ADMIN">
-            <meta-data
-                android:name="android.app.device_admin"
-                android:resource="@xml/sleep_admin_policy" />
-
-            <intent-filter>
-                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
-            </intent-filter>
-        </receiver>
-
-        <service
-            android:name="com.neoapps.neolauncher.OmegaAccessibilityService"
-            android:exported="true"
-            android:label="@string/derived_app_name"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
-            <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService" />
-            </intent-filter>
-        </service>
-
         <receiver
             android:name="com.neoapps.neolauncher.smartspace.SmartSpaceAppWidgetProvider"
             android:exported="false">
