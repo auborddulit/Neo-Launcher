@@ -542,12 +542,7 @@ class NeoLauncher : Launcher(), SavedStateRegistryOwner,
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
-    override fun createTouchControllers(): Array<TouchController> {
-        val list = ArrayList<TouchController>()
-        list.add(dragController)
 
-        return list.toTypedArray() + super.createTouchControllers()
-    }
 
     inline fun prepareDummyView(view: View, crossinline callback: (View) -> Unit) {
         val rect = Rect()
